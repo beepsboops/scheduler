@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "components/Application.scss";
 import DayListItem from "components/DayListItem";
 import DayList from "components/DayList";
@@ -65,24 +66,7 @@ const appointmentData = [
     id: 5,
     time: "5pm",
     interview: {
-      student: "Lisa Simpson",
-      interviewer: {
-        id: 3,
-        name: "Mildred Nazir",
-        avatar: "https://i.imgur.com/T2WwVfS.png",
-      },
-    },
-  },
-
-  {
-    id: 5,
-    time: "11am",
-  },
-  {
-    id: 6,
-    time: "5pm",
-    interview: {
-      student: "Maggie Simpson",
+      student: "Ralph Wiggum",
       interviewer: {
         id: 4,
         name: "Cohana Roy",
@@ -92,27 +76,42 @@ const appointmentData = [
   },
 ];
 
-const days = [
-  {
-    id: 1,
-    name: "Monday",
-    spots: 2,
-  },
-  {
-    id: 2,
-    name: "Tuesday",
-    spots: 5,
-  },
-  {
-    id: 3,
-    name: "Wednesday",
-    spots: 0,
-  },
-];
+// Old hardcoded days array. Replaced with const [days, setDays] = useState([]);
+// const days = [
+//   {
+//     id: 1,
+//     name: "Monday",
+//     spots: 2,
+//   },
+//   {
+//     id: 2,
+//     name: "Tuesday",
+//     spots: 5,
+//   },
+//   {
+//     id: 3,
+//     name: "Wednesday",
+//     spots: 0,
+//   },
+// ];
 
 export default function Application(props) {
   // My useState implementation
   const [day, setDay] = useState(`Monday`);
+
+  // From W07D3 Requesting the Days
+  const [days, setDays] = useState([]);
+
+  // My useEffect axios function to request days
+  useEffect(() => {
+    axios.get("/api/days").then((response) => {
+      console.log(
+        "Application: useEffect: axios: response.data",
+        response.data
+      );
+      setDays([...response.data]);
+    });
+  }, []);
 
   return (
     <main className="layout">
