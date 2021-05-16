@@ -5,7 +5,7 @@ import DayListItem from "components/DayListItem";
 import DayList from "components/DayList";
 import "components/Appointment";
 import Appointment from "components/Appointment";
-import getAppointmentsForDay from "helpers/selectors.js";
+import { getAppointmentsForDay, getInterview } from "helpers/selectors.js";
 
 // Old hardcoded appointments data. Replaced with const dailyAppointments
 // const appointments = [
@@ -110,6 +110,7 @@ export default function Application(props) {
     day: "Monday",
     days: [],
     appointments: {},
+    interviewers: "",
   });
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
@@ -192,7 +193,7 @@ export default function Application(props) {
           return (
             <Appointment
               time={appointment.time}
-              interview={appointment.interview}
+              interview={getInterview(state, appointment.interview)}
             />
           );
         })}

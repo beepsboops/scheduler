@@ -3,6 +3,7 @@ import "components/Appointment/styles.scss";
 import Header from "components/Appointment/Header.js";
 import Show from "components/Appointment/Show.js";
 import Empty from "components/Appointment/Empty.js";
+import useVisualMode from "hooks/useVisualMode";
 
 export default function Appointment(props) {
   console.log("index: props:", props);
