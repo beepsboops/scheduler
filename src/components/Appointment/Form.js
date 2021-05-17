@@ -45,7 +45,7 @@ export default function Form(props) {
         <InterviewerList
           interviewers={props.interviewers}
           interviewer={interviewer}
-          setInterviewer={setInterviewer} // Change this to something else?
+          setInterviewer={setInterviewer}
         />
       </section>
       <section className="appointment__card-right">
