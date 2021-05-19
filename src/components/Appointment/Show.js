@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function Show(props) {
+  console.log("LOG: Show: props:", props);
+  const [name] = useState(props.name || "");
+  const [interviewer] = useState(props.interviewer || null);
+
   return (
     <main className="appointment__card appointment__card--show">
       <section className="appointment__card-left">

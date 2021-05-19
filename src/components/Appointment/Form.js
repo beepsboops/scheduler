@@ -4,10 +4,9 @@ import Button from "components/Button";
 
 // Not seeing changes in state in console
 export default function Form(props) {
-  console.log("From: props:", props);
+  // console.log("LOG: Form: props:", props);
   const [name, setName] = useState(props.name || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
-  // console.log(props);
 
   // Reset function
   const reset = function () {
@@ -22,19 +21,24 @@ export default function Form(props) {
   };
 
   const handleChange = function (e) {
-    console.log("handleChange:", e.target.value);
+    // console.log("handleChange:", e.target.value);
     setName(e.target.value);
   };
 
+  // const createOrEdit = function()
+
   return (
     <main className="appointment__card appointment__card--create">
+      {/* {interviewer.avatar}____ */}
       <section className="appointment__card-left">
         <form autoComplete="off" onSubmit={(event) => event.preventDefault()}>
           <input
             className="appointment__create-input text--semi-bold"
             name="name"
             type="text"
-            placeholder="Enter Student Name"
+            // Logic to either render Form in CREATE mode or EDIT
+            placeholder={props.student ? props.student : "Enter Student Name"}
+            // placeholder="Enter Student Name"
             value={name}
             onChange={handleChange}
             /*
@@ -44,7 +48,7 @@ export default function Form(props) {
         </form>
         <InterviewerList
           interviewers={props.interviewers}
-          interviewer={interviewer}
+          interviewer={props.interviewer ? props.interviewer : interviewer}
           setInterviewer={setInterviewer}
         />
       </section>
@@ -53,7 +57,7 @@ export default function Form(props) {
           <Button danger onClick={cancel}>
             Cancel
           </Button>
-          <Button confirm onClick={props.onSave}>
+          <Button confirm onClick={() => props.onSave(name, interviewer)}>
             Save
           </Button>
         </section>

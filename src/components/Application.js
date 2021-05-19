@@ -5,7 +5,11 @@ import DayListItem from "components/DayListItem";
 import DayList from "components/DayList";
 import "components/Appointment";
 import Appointment from "components/Appointment";
-import { getAppointmentsForDay, getInterview } from "helpers/selectors.js";
+import {
+  getAppointmentsForDay,
+  getInterviewersForDay,
+  getInterview,
+} from "helpers/selectors.js";
 
 // Old hardcoded appointments data. Replaced with const dailyAppointments
 // const appointments = [
@@ -110,18 +114,68 @@ export default function Application(props) {
     day: "Monday",
     days: [],
     appointments: {},
-    interviewers: "",
+    interviewers: [],
   });
 
-  const dailyAppointments = getAppointmentsForDay(state, state.day);
-  console.log("Application: dailyAppointments", dailyAppointments);
+  var dailyAppointments = getAppointmentsForDay(state, state.day);
+  // console.log("LOG: Application: dailyAppointments", dailyAppointments);
+  const interviewers = getInterviewersForDay(state, state.day);
+  // console.log("LOG: Application: interviewers", interviewers);
 
   const setDay = (day) => setState((prev) => ({ ...prev, day }));
+
   // This is equivalent to: const setDay = (item) => setState((prev) => ({ ...prev, day:item }));
 
   // W07D03 Retrieving Appointments: setDays deprecated, replaced with setState
   // const setDays = (days) => setState((prev) => ({ ...prev, days }));
   // This is equivalent to: const setDays = (items) => setState((prev) => ({ ...prev, days:items }));
+
+  // bookInterview function that creates new interview from empty slot
+  function bookInterview(id, interview) {
+    // console.log("LOG: bookInterview:", interview.interviewer.id, interview);
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview },
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment,
+    };
+    // console.log("LOG: bookInterview: id", id);
+    // console.log("LOG: bookInterview: appointments[id]:", appointments[id]);
+
+    // console.log("LOG: *********:", interview);
+    return (
+      axios
+        .put(`/api/appointments/${id}`, { interview })
+        // When the response comes back update the state using the existing setState
+        .then(() => {
+          setState((prev) => ({ ...prev, appointments }));
+        })
+    );
+  }
+
+  // cancelInterview function that use's appointment id to find the right appointment slot and set it's interview data to null
+  function cancelInterview(id, interview) {
+    console.log("LOG: Application: hit cancelInterview function");
+    const appointment = {
+      ...state.appointments[id],
+      interview: null,
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment,
+    };
+
+    return (
+      axios
+        .delete(`/api/appointments/${id}`)
+        // When the response comes back update the state using the existing setState
+        .then(() => {
+          setState((prev) => ({ ...prev, appointments }));
+        })
+    );
+  }
 
   // My useEffect axios function to request days
   useEffect(() => {
@@ -143,18 +197,18 @@ export default function Application(props) {
       Promise.resolve(axios.get("http://localhost:8001/api/interviewers")),
     ])
       .then((all) => {
-        console.log("Application: useEffect: all[0]", all[0]); // first
-        console.log("Application: useEffect: all[1]", all[1]); // second
-        console.log("Application: useEffect: all[2]", all[2]); // third
+        // console.log("LOG: Application: useEffect: all[0]", all[0]); // first
+        // console.log("LOG: Application: useEffect: all[1]", all[1]); // second
+        // console.log("LOG: Application: useEffect: all[2]", all[2]); // third
 
         const [first, second, third] = all;
 
-        console.log(
-          "Application: useEffect: first, second, third",
-          first,
-          second,
-          third
-        );
+        // console.log(
+        //   "LOG: Application: useEffect: first, second, third",
+        //   first,
+        //   second,
+        //   third
+        // );
 
         setState((prev) => ({
           ...prev,
@@ -167,6 +221,9 @@ export default function Application(props) {
         console.log("Error:", error);
       });
   }, []);
+  dailyAppointments = getAppointmentsForDay(state, state.day);
+  // console.log("LOG: state %%%%%%%:", state);
+  console.log("LOG: dailyAppointments", dailyAppointments);
 
   return (
     <main className="layout">
@@ -189,11 +246,29 @@ export default function Application(props) {
       <section className="schedule">
         {/* Replace this with the schedule elements durint the "The Scheduler" activity. */}
         {/*My map function for iterating over appointments data*/}
+        {/*Mentor: Refactor below, pull out map function, return proper array for interview & interviews???*/}
         {dailyAppointments.map((appointment) => {
+          console.log(
+            "LOG: Application: dailyAppointments.map: appointment:",
+            appointment
+          );
+          // console.log(
+          //   "LOG: Application: Appointment Comp: appointment.interview:",
+          //   appointment.interview
+          // );
+          // console.log(
+          //   "LOG: Application: Appointment Comp: getInterview:",
+          //   getInterview(state, appointment.interview)
+          // );
           return (
             <Appointment
               time={appointment.time}
+              id={appointment.id}
+              key={appointment.id}
               interview={getInterview(state, appointment.interview)}
+              interviewers={interviewers}
+              bookInterview={bookInterview}
+              cancelInterview={cancelInterview}
             />
           );
         })}
