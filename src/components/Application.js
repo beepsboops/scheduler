@@ -10,172 +10,24 @@ import {
   getInterviewersForDay,
   getInterview,
 } from "helpers/selectors.js";
-
-// Old hardcoded appointments data. Replaced with const dailyAppointments
-// const appointments = [
-//   {
-//     id: 1,
-//     time: "12pm",
-//   },
-//   {
-//     id: 2,
-//     time: "1pm",
-//     interview: {
-//       student: "Lydia Miller-Jones",
-//       interviewer: {
-//         id: 1,
-//         name: "Sylvia Palmer",
-//         avatar: "https://i.imgur.com/LpaY82x.png",
-//       },
-//     },
-//   },
-
-//   {
-//     id: 2,
-//     time: "2pm",
-//   },
-//   {
-//     id: 3,
-//     time: "3pm",
-//     interview: {
-//       student: "Bart Simpson",
-//       interviewer: {
-//         id: 2,
-//         name: "Tori Malcolm",
-//         avatar: "https://i.imgur.com/Nmx0Qxo.png",
-//       },
-//     },
-//   },
-
-//   {
-//     id: 3,
-//     time: "2:30pm",
-//   },
-//   {
-//     id: 4,
-//     time: "4pm",
-//     interview: {
-//       student: "Lisa Simpson",
-//       interviewer: {
-//         id: 3,
-//         name: "Mildred Nazir",
-//         avatar: "https://i.imgur.com/Nmx0Qxo.png",
-//       },
-//     },
-//   },
-
-//   {
-//     id: 4,
-//     time: "11am",
-//   },
-//   {
-//     id: 5,
-//     time: "5pm",
-//     interview: {
-//       student: "Ralph Wiggum",
-//       interviewer: {
-//         id: 4,
-//         name: "Cohana Roy",
-//         avatar: "https://i.imgur.com/FK8V841.jpg",
-//       },
-//     },
-//   },
-// ];
-
-// Old hardcoded days array. Replaced with const [days, setDays] = useState([]);
-// const days = [
-//   {
-//     id: 1,
-//     name: "Monday",
-//     spots: 2,
-//   },
-//   {
-//     id: 2,
-//     name: "Tuesday",
-//     spots: 5,
-//   },
-//   {
-//     id: 3,
-//     name: "Wednesday",
-//     spots: 0,
-//   },
-// ];
-
+import useApplicationData from "hooks/useApplicationData";
+console.log("useApplicationData:", useApplicationData);
 export default function Application(props) {
-  // My useState implementation, deprecated W07D03 Managing State
-  // const [day, setDay] = useState(`Monday`);
-
-  // From W07D3 Requesting the Days, deprecated W07D03 Managing State
-  // const [days, setDays] = useState([]);
-
-  // New way of using and setting state W07D03 Managing State
-
-  const [state, setState] = useState({
-    day: "Monday",
-    days: [],
-    appointments: {},
-    interviewers: [],
-  });
-
-  var dailyAppointments = getAppointmentsForDay(state, state.day);
+  const {
+    setState,
+    state,
+    setDay,
+    bookInterview,
+    cancelInterview,
+  } = useApplicationData();
+  let dailyAppointments = getAppointmentsForDay(state, state.day);
   // console.log("LOG: Application: dailyAppointments", dailyAppointments);
   const interviewers = getInterviewersForDay(state, state.day);
   // console.log("LOG: Application: interviewers", interviewers);
 
-  const setDay = (day) => setState((prev) => ({ ...prev, day }));
-
-  // This is equivalent to: const setDay = (item) => setState((prev) => ({ ...prev, day:item }));
-
   // W07D03 Retrieving Appointments: setDays deprecated, replaced with setState
   // const setDays = (days) => setState((prev) => ({ ...prev, days }));
   // This is equivalent to: const setDays = (items) => setState((prev) => ({ ...prev, days:items }));
-
-  // bookInterview function that creates new interview from empty slot
-  function bookInterview(id, interview) {
-    // console.log("LOG: bookInterview:", interview.interviewer.id, interview);
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview },
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
-    // console.log("LOG: bookInterview: id", id);
-    // console.log("LOG: bookInterview: appointments[id]:", appointments[id]);
-
-    // console.log("LOG: *********:", interview);
-    return (
-      axios
-        .put(`/api/appointments/${id}`, { interview })
-        // When the response comes back update the state using the existing setState
-        .then(() => {
-          setState((prev) => ({ ...prev, appointments }));
-        })
-    );
-  }
-
-  // cancelInterview function that use's appointment id to find the right appointment slot and set it's interview data to null
-  function cancelInterview(id, interview) {
-    console.log("LOG: Application: hit cancelInterview function");
-    const appointment = {
-      ...state.appointments[id],
-      interview: null,
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
-
-    return (
-      axios
-        .delete(`/api/appointments/${id}`)
-        // When the response comes back update the state using the existing setState
-        .then(() => {
-          setState((prev) => ({ ...prev, appointments }));
-        })
-    );
-  }
 
   // My useEffect axios function to request days
   useEffect(() => {
