@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import "components/Application.scss";
-import DayListItem from "components/DayListItem";
 import DayList from "components/DayList";
 import "components/Appointment";
 import Appointment from "components/Appointment";
@@ -11,7 +10,7 @@ import {
   getInterview,
 } from "helpers/selectors.js";
 import useApplicationData from "hooks/useApplicationData";
-console.log("useApplicationData:", useApplicationData);
+// console.log("LOG: useApplicationData:", useApplicationData);
 export default function Application(props) {
   const {
     setState,
@@ -19,7 +18,9 @@ export default function Application(props) {
     setDay,
     bookInterview,
     cancelInterview,
+    getSpotsRemaining,
   } = useApplicationData();
+
   let dailyAppointments = getAppointmentsForDay(state, state.day);
   // console.log("LOG: Application: dailyAppointments", dailyAppointments);
   const interviewers = getInterviewersForDay(state, state.day);
@@ -53,7 +54,7 @@ export default function Application(props) {
         // console.log("LOG: Application: useEffect: all[1]", all[1]); // second
         // console.log("LOG: Application: useEffect: all[2]", all[2]); // third
 
-        const [first, second, third] = all;
+        // const [first, second, third] = all;
 
         // console.log(
         //   "LOG: Application: useEffect: first, second, third",
@@ -73,9 +74,10 @@ export default function Application(props) {
         console.log("Error:", error);
       });
   }, []);
+
+  // Storing appointments for a specific day
   dailyAppointments = getAppointmentsForDay(state, state.day);
-  // console.log("LOG: state %%%%%%%:", state);
-  console.log("LOG: dailyAppointments", dailyAppointments);
+  console.log("LOG: Application: dailyAppointments", dailyAppointments);
 
   return (
     <main className="layout">
@@ -100,10 +102,10 @@ export default function Application(props) {
         {/*My map function for iterating over appointments data*/}
         {/*Mentor: Refactor below, pull out map function, return proper array for interview & interviews???*/}
         {dailyAppointments.map((appointment) => {
-          console.log(
-            "LOG: Application: dailyAppointments.map: appointment:",
-            appointment
-          );
+          // console.log(
+          //   "LOG: Application: dailyAppointments.map: appointment:",
+          //   appointment
+          // );
           // console.log(
           //   "LOG: Application: Appointment Comp: appointment.interview:",
           //   appointment.interview

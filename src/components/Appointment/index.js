@@ -10,7 +10,7 @@ import Confirm from "components/Appointment/Confirm";
 import Error from "components/Appointment/Error";
 
 export default function Appointment(props) {
-  console.log("LOG: index: Appointment: props:", props);
+  // console.log("LOG: index: Appointment: props:", props);
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
@@ -30,7 +30,7 @@ export default function Appointment(props) {
       student: name,
       interviewer,
     };
-
+    console.log("LOG: save: interview", interview);
     transition(SAVING);
     // Transition to SHOW when the promise returned by props.bookInterview resolves
     props
@@ -99,13 +99,13 @@ export default function Appointment(props) {
       {mode === ERROR_SAVE && (
         <Error
           message={"Could not save appointment"}
-          onClose={() => transition(EMPTY)}
+          onClose={() => (props.interview ? transition(SHOW) : back(EMPTY))}
         />
       )}
       {mode === ERROR_DELETE && (
         <Error
           message={"Could not cancel appointment"}
-          onClose={() => transition(CONFIRM)}
+          onClose={() => transition(SHOW)}
         />
       )}
     </article>

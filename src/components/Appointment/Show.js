@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 export default function Show(props) {
-  console.log("LOG: Show: props:", props);
+  // console.log("LOG: Show: props:", props);
   const [name] = useState(props.name || "");
   const [interviewer] = useState(props.interviewer || null);
 
