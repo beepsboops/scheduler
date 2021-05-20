@@ -19,7 +19,6 @@ export default function useApplicationData() {
 
   // Sets the current day
   const setDay = (day) => setState((prev) => ({ ...prev, day }));
-  // This is equivalent to: const setDay = (item) => setState((prev) => ({ ...prev, day:item }));
 
   ////////////////////////////
   // bookInterview Function //
@@ -27,7 +26,6 @@ export default function useApplicationData() {
 
   // Creates new interview from empty slot
   function bookInterview(id, interview) {
-    // console.log("LOG: bookInterview:", interview.interviewer.id, interview);
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview },
@@ -37,18 +35,11 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment,
     };
-    // console.log("LOG: bookInterview: id", id);
-    // console.log("LOG: bookInterview: appointments[id]:", appointments[id]);
-    // console.log("LOG: *********:", interview);
-    return (
-      axios
-        .put(`/api/appointments/${id}`, { interview })
-        // When the response comes back update the state using the existing setState
-        .then(() => {
-          setState((prev) => ({ ...prev, appointments }));
-          updateSpotsOnCurrentDay(-1);
-        })
-    );
+
+    return axios.put(`/api/appointments/${id}`, { interview }).then(() => {
+      setState((prev) => ({ ...prev, appointments }));
+      updateSpotsOnCurrentDay(-1);
+    });
   }
 
   //////////////////////////////
@@ -82,25 +73,12 @@ export default function useApplicationData() {
   // getSpotsRemaining Function //
   ////////////////////////////////
 
-  // Get index of current day; get copy of state.days; update correct day inside copy; then set state.days to the copy
-
   function updateSpotsOnCurrentDay(delta) {
-    console.log("LOG: state.day:", state.day);
-    console.log("LOG: state.days:", state.days);
-
     for (let index in state.days) {
       let daysCopy = state.days;
       if (daysCopy[index].name === state.day) {
-        console.log("index:", index);
-        console.log("state.day:", state.day);
-        console.log("daysCopy[index].spots:", daysCopy[index].spots);
         daysCopy[index].spots = daysCopy[index].spots + delta;
-        console.log("daysCopy[index].spots:", daysCopy[index].spots);
-        console.log("daysCopy:", daysCopy);
         setState((prev) => ({ ...prev, daysCopy }));
-        // setState(...prev, daysCopy);
-        // setState(daysFound);
-        // day.spots = day.spots + delta
       }
     }
   }

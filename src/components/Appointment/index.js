@@ -10,7 +10,6 @@ import Confirm from "components/Appointment/Confirm";
 import Error from "components/Appointment/Error";
 
 export default function Appointment(props) {
-  // console.log("LOG: index: Appointment: props:", props);
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
@@ -24,7 +23,7 @@ export default function Appointment(props) {
     props.interview ? SHOW : EMPTY
   );
 
-  // save Function receives name & interviewer from Form component & passes this to props.bookInterview
+  // save function receives name & interviewer from Form component & passes to bookInterview
   function save(name, interviewer) {
     const interview = {
       student: name,
@@ -32,7 +31,6 @@ export default function Appointment(props) {
     };
     console.log("LOG: save: interview", interview);
     transition(SAVING);
-    // Transition to SHOW when the promise returned by props.bookInterview resolves
     props
       .bookInterview(props.id, interview)
       .then(() => {
@@ -41,10 +39,8 @@ export default function Appointment(props) {
       .catch((error) => transition(ERROR_SAVE, true));
   }
 
-  // cancel Function receives name & interviewer from Show component & passes this to props.cancelInterview
+  // cancel Function receives name & interviewer from Form component & passes to cancelInterview
   function cancel(name, interviewer) {
-    // console.log("LOG: index: hit cancel function");
-    // console.log("LOG: index: name, interviewer:", name, interviewer);
     const interview = {
       student: name,
       interviewer,
@@ -53,7 +49,6 @@ export default function Appointment(props) {
     props
       .cancelInterview(props.id, interview)
       .then(() => {
-        // console.log("LOG: index: cancel function: promise returned");
         transition(EMPTY);
       })
       .catch((error) => transition(ERROR_DELETE, true));
@@ -111,4 +106,3 @@ export default function Appointment(props) {
     </article>
   );
 }
-// From W07D2 Displaying Appointments: need to include the <Appointment id="last" time="1pm" /> as our constant last component??
