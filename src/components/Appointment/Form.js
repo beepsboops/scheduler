@@ -2,17 +2,6 @@ import React, { useState } from "react";
 import InterviewerList from "components/InterviewerList";
 import Button from "components/Button";
 
-// Mentor: Need validation in this file???
-
-// Errors while trying to create/save new appointment:
-// [x] Saving without student name & without interviewer -> TypeError: Cannot read property 'name' of undefined
-// [x] Saving without interviewer & with student -> TypeError: Cannot read property 'name' of undefined
-// [x] Saving without student name & with interviwer -> Appointment saved with no student name
-
-// Errors while trying to edit appointment:
-// [x] Editing interviewer then saving -> student name deleted, number of spots decreases
-// [x] Editing then re-saving original appointment -> student name deleted, number of spots decreases
-
 export default function Form(props) {
   const [name, setName] = useState(props.name || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
