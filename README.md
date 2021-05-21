@@ -4,9 +4,9 @@ Using the latest tools and techniques, we build and test a React application tha
 
 ## Final Product
 
-!["Interview Scheduler App"](URL)
-!["Create Appointment"](URL)
-!["Edit or Delete Appointment"](URL)
+!["Interview Scheduler App"](https://github.com/beepsboops/scheduler/blob/master/docs/interview-scheduler-app.jpg)
+!["Create Appointment"](https://github.com/beepsboops/scheduler/blob/master/docs/create-appointment.jpg)
+!["Edit or Delete Appointment"](https://github.com/beepsboops/scheduler/blob/master/docs/edit-delete-appointment.jpg)
 
 ## Setup
 
