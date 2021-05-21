@@ -2,13 +2,28 @@ import React, { useState } from "react";
 import InterviewerList from "components/InterviewerList";
 import Button from "components/Button";
 
+// Mentor: Need validation in this file???
+
+// Errors while trying to create/save new appointment:
+// [x] Saving without student name & without interviewer -> TypeError: Cannot read property 'name' of undefined
+// [x] Saving without interviewer & with student -> TypeError: Cannot read property 'name' of undefined
+// [x] Saving without student name & with interviwer -> Appointment saved with no student name
+
+// Errors while trying to edit appointment:
+// [x] Editing interviewer then saving -> student name deleted, number of spots decreases
+// [x] Editing then re-saving original appointment -> student name deleted, number of spots decreases
+
 export default function Form(props) {
   const [name, setName] = useState(props.name || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
+  // State handling for form input errors
+  const [error, setError] = useState("");
 
   // Reset function
   const reset = function () {
     setName("");
+    // For resetting error message
+    setError("");
     setInterviewer(null);
   };
 
@@ -18,9 +33,25 @@ export default function Form(props) {
     props.onCancel && props.onCancel();
   };
 
+  // For handling student name input
   const handleChange = function (e) {
     setName(e.target.value);
   };
+
+  // For validating that student name entered and interviewer selected
+  function validate() {
+    if (name === "") {
+      setError("Student name cannot be blank");
+      return;
+    }
+    if (interviewer === null) {
+      setError("Interviewer must be selected");
+      return;
+    }
+    // Resetting error message, saving appointment when no errors occur
+    setError("");
+    props.onSave(name, interviewer);
+  }
 
   return (
     <main className="appointment__card appointment__card--create">
@@ -37,8 +68,11 @@ export default function Form(props) {
             /*
           This must be a controlled component
         */
+            // Test code
+            data-testid="student-name-input"
           />
         </form>
+        <section className="appointment__validation">{error}</section>
         <InterviewerList
           interviewers={props.interviewers}
           interviewer={interviewer}
@@ -50,7 +84,7 @@ export default function Form(props) {
           <Button danger onClick={cancel}>
             Cancel
           </Button>
-          <Button confirm onClick={() => props.onSave(name, interviewer)}>
+          <Button confirm onClick={validate}>
             Save
           </Button>
         </section>

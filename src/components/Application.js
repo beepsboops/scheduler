@@ -11,22 +11,23 @@ import {
 } from "helpers/selectors.js";
 import useApplicationData from "hooks/useApplicationData";
 
-export default function Application(props) {
+export default function Application() {
   const {
     setState,
     state,
     setDay,
     bookInterview,
     cancelInterview,
-    getSpotsRemaining,
   } = useApplicationData();
 
+  // Retrieving, storing appointments for a specific day
   let dailyAppointments = getAppointmentsForDay(state, state.day);
+  // Retrieving, storing interviewers for a specific day
   const interviewers = getInterviewersForDay(state, state.day);
 
   // My useEffect axios function to request days
   useEffect(() => {
-    // Retrieving Appointemnts
+    // Retrieving Appointments
     Promise.all([
       Promise.resolve(axios.get("http://localhost:8001/api/days")),
       Promise.resolve(axios.get("http://localhost:8001/api/appointments")),
@@ -43,10 +44,7 @@ export default function Application(props) {
       .catch((error) => {
         console.log("Error:", error);
       });
-  }, []);
-
-  // Storing appointments for a specific day
-  dailyAppointments = getAppointmentsForDay(state, state.day);
+  });
 
   return (
     <main className="layout">

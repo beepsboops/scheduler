@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 export default function useApplicationData() {
@@ -47,8 +47,7 @@ export default function useApplicationData() {
   //////////////////////////////
 
   // Uses appointment id to find the right appointment slot and set it's interview data to null
-  function cancelInterview(id, interview) {
-    console.log("LOG: Application: hit cancelInterview function");
+  function cancelInterview(id) {
     const appointment = {
       ...state.appointments[id],
       interview: null,

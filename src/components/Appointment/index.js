@@ -29,14 +29,13 @@ export default function Appointment(props) {
       student: name,
       interviewer,
     };
-    console.log("LOG: save: interview", interview);
     transition(SAVING);
     props
       .bookInterview(props.id, interview)
       .then(() => {
         transition(SHOW);
       })
-      .catch((error) => transition(ERROR_SAVE, true));
+      .catch(() => transition(ERROR_SAVE, true));
   }
 
   // cancel Function receives name & interviewer from Form component & passes to cancelInterview
@@ -51,7 +50,7 @@ export default function Appointment(props) {
       .then(() => {
         transition(EMPTY);
       })
-      .catch((error) => transition(ERROR_DELETE, true));
+      .catch(() => transition(ERROR_DELETE, true));
   }
 
   return (
