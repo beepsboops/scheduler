@@ -3,7 +3,7 @@ import InterviewerList from "components/InterviewerList";
 import Button from "components/Button";
 
 export default function Form(props) {
-  const [name, setName] = useState(props.name || "");
+  const [name, setName] = useState(props.student || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
   // State handling for form input errors
   const [error, setError] = useState("");
@@ -50,16 +50,14 @@ export default function Form(props) {
             className="appointment__create-input text--semi-bold"
             name="name"
             type="text"
-            // Logic to either render Form in CREATE mode or EDIT
-            placeholder={props.student ? props.student : "Enter Student Name"}
+            placeholder={"Enter Student Name"}
             value={name}
             onChange={handleChange}
+            // Test code
             data-testid="student-name-input"
             /*
           This must be a controlled component
         */
-            // Test code
-            data-testid="student-name-input"
           />
         </form>
         <section className="appointment__validation">{error}</section>
