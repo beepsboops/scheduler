@@ -24,9 +24,9 @@ export default function Application() {
   useEffect(() => {
     // Retrieving Appointments
     Promise.all([
-      Promise.resolve(axios.get("http://localhost:8001/api/days")),
-      Promise.resolve(axios.get("http://localhost:8001/api/appointments")),
-      Promise.resolve(axios.get("http://localhost:8001/api/interviewers")),
+      Promise.resolve(axios.get("/api/days")),
+      Promise.resolve(axios.get("/api/appointments")),
+      Promise.resolve(axios.get("/api/interviewers")),
     ])
       .then((all) => {
         setState((prev) => ({
