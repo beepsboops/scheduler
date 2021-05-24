@@ -12,13 +12,8 @@ import {
 import useApplicationData from "hooks/useApplicationData";
 
 export default function Application() {
-  const {
-    setState,
-    state,
-    setDay,
-    bookInterview,
-    cancelInterview,
-  } = useApplicationData();
+  const { setState, state, setDay, bookInterview, cancelInterview } =
+    useApplicationData();
 
   // Retrieving, storing appointments for a specific day
   let dailyAppointments = getAppointmentsForDay(state, state.day);
@@ -44,8 +39,7 @@ export default function Application() {
       .catch((error) => {
         console.log("Error:", error);
       });
-  });
-
+  }, [setState]);
   return (
     <main className="layout">
       <section className="sidebar">
