@@ -2,10 +2,6 @@ import { useState } from "react";
 import axios from "axios";
 
 export default function useApplicationData() {
-  ///////////
-  // State //
-  ///////////
-
   const [state, setState] = useState({
     day: "Monday",
     days: [],
@@ -13,16 +9,8 @@ export default function useApplicationData() {
     interviewers: [],
   });
 
-  /////////////////////
-  // setDay Function //
-  /////////////////////
-
   // Sets the current day
   const setDay = (day) => setState((prev) => ({ ...prev, day }));
-
-  ////////////////////////////
-  // bookInterview Function //
-  ////////////////////////////
 
   // Creates new interview from empty slot
   function bookInterview(id, interview) {
@@ -41,10 +29,6 @@ export default function useApplicationData() {
       updateSpotsOnCurrentDay(-1);
     });
   }
-
-  //////////////////////////////
-  // cancelInterview Function //
-  //////////////////////////////
 
   // Uses appointment id to find the right appointment slot and set it's interview data to null
   function cancelInterview(id) {
@@ -68,10 +52,7 @@ export default function useApplicationData() {
     );
   }
 
-  ////////////////////////////////
-  // getSpotsRemaining Function //
-  ////////////////////////////////
-
+  // Updates remaining interview spots in sidebar menu
   function updateSpotsOnCurrentDay(delta) {
     for (let index in state.days) {
       let daysCopy = state.days;
