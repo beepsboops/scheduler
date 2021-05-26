@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import axios from "axios";
+import React from "react";
 import "components/Application.scss";
 import DayList from "components/DayList";
 import "components/Appointment";
@@ -12,7 +11,7 @@ import {
 import useApplicationData from "hooks/useApplicationData";
 
 export default function Application() {
-  const { setState, state, setDay, bookInterview, cancelInterview } =
+  const { state, setDay, bookInterview, cancelInterview } =
     useApplicationData();
 
   // Retrieving, storing appointments for a specific day
@@ -20,26 +19,6 @@ export default function Application() {
   // Retrieving, storing interviewers for a specific day
   const interviewers = getInterviewersForDay(state, state.day);
 
-  // My useEffect axios function to request days
-  useEffect(() => {
-    // Retrieving Appointments
-    Promise.all([
-      Promise.resolve(axios.get("/api/days")),
-      Promise.resolve(axios.get("/api/appointments")),
-      Promise.resolve(axios.get("/api/interviewers")),
-    ])
-      .then((all) => {
-        setState((prev) => ({
-          ...prev,
-          days: all[0].data,
-          appointments: all[1].data,
-          interviewers: all[2].data,
-        }));
-      })
-      .catch((error) => {
-        console.log("Error:", error);
-      });
-  }, [setState]);
   return (
     <main className="layout">
       <section className="sidebar">
