@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function useApplicationData() {
@@ -8,6 +8,27 @@ export default function useApplicationData() {
     appointments: {},
     interviewers: [],
   });
+
+  // My useEffect axios function to request days
+  useEffect(() => {
+    // Retrieving Appointments
+    Promise.all([
+      Promise.resolve(axios.get("/api/days")),
+      Promise.resolve(axios.get("/api/appointments")),
+      Promise.resolve(axios.get("/api/interviewers")),
+    ])
+      .then((all) => {
+        setState((prev) => ({
+          ...prev,
+          days: all[0].data,
+          appointments: all[1].data,
+          interviewers: all[2].data,
+        }));
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
+  }, [setState]);
 
   // Sets the current day
   const setDay = (day) => setState((prev) => ({ ...prev, day }));
@@ -25,8 +46,10 @@ export default function useApplicationData() {
     };
 
     return axios.put(`/api/appointments/${id}`, { interview }).then(() => {
+      if (state.appointments[id].interview === null) {
+        updateSpotsOnCurrentDay(-1);
+      }
       setState((prev) => ({ ...prev, appointments }));
-      updateSpotsOnCurrentDay(-1);
     });
   }
 
